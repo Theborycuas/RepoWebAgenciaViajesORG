@@ -1,0 +1,246 @@
+/*==============================================================*/
+/* DBMS name:      SAP SQL Anywhere 16                          */
+/* Created on:     7/7/2018 22:43:01                            */
+/*==============================================================*/
+
+
+if exists(select 1 from sys.sysforeignkey where role='FK_DETALLE__REFERENCE_VIAJE') then
+    alter table DETALLE_VIAJE_ACTIVIDAD
+       delete foreign key FK_DETALLE__REFERENCE_VIAJE
+end if;
+
+if exists(select 1 from sys.sysforeignkey where role='FK_DETALLE__REFERENCE_ACTIVIDA') then
+    alter table DETALLE_VIAJE_ACTIVIDAD
+       delete foreign key FK_DETALLE__REFERENCE_ACTIVIDA
+end if;
+
+if exists(select 1 from sys.sysforeignkey where role='FK_VIAJE_REFERENCE_CLIENTE') then
+    alter table VIAJE
+       delete foreign key FK_VIAJE_REFERENCE_CLIENTE
+end if;
+
+if exists(select 1 from sys.sysforeignkey where role='FK_VIAJE_REFERENCE_EMPLEADO') then
+    alter table VIAJE
+       delete foreign key FK_VIAJE_REFERENCE_EMPLEADO
+end if;
+
+if exists(select 1 from sys.sysforeignkey where role='FK_VIAJE_REFERENCE_DESTINO') then
+    alter table VIAJE
+       delete foreign key FK_VIAJE_REFERENCE_DESTINO
+end if;
+
+if exists(select 1 from sys.sysforeignkey where role='FK_VIAJE_REFERENCE_ALOJAMIE') then
+    alter table VIAJE
+       delete foreign key FK_VIAJE_REFERENCE_ALOJAMIE
+end if;
+
+if exists(select 1 from sys.sysforeignkey where role='FK_VIAJE_REFERENCE_TRANSPOR') then
+    alter table VIAJE
+       delete foreign key FK_VIAJE_REFERENCE_TRANSPOR
+end if;
+
+drop table if exists ACTIVIDAD;
+
+drop table if exists ALOJAMIENTO;
+
+drop table if exists CLIENTE;
+
+drop table if exists DESTINO;
+
+drop table if exists DETALLE_VIAJE_ACTIVIDAD;
+
+drop table if exists EMPLEADO;
+
+drop table if exists TRANSPORTE;
+
+drop table if exists VIAJE;
+
+/*==============================================================*/
+/* Table: ACTIVIDAD                                             */
+/*==============================================================*/
+create table ACTIVIDAD 
+(
+   ID_ACTIVIDAD         int                            not null,
+   NOMBRE_ACTIVIDAD     varchar                        not null,
+   LUGAR_ACTIVIDAD      varchar                        not null,
+   COSTEPP_ACTIVIDAD    decimal                        not null,
+   DESCRIPCION_ACTIVIDAD varchar                        not null,
+   IMAGEN_ACTIVIDAD     image                          not null,
+   constraint PK_ACTIVIDAD primary key clustered (ID_ACTIVIDAD)
+);
+
+/*==============================================================*/
+/* Table: ALOJAMIENTO                                           */
+/*==============================================================*/
+create table ALOJAMIENTO 
+(
+   ID_ALOJAMIENTO       int                            not null,
+   NOMBRE_ALOJAMIENTO   varchar                        not null,
+   TIPO_ALOJAMIENTO     varchar                        not null,
+   PRECIOTA_AD_ALOJAMIENTO decimal                        not null,
+   PRECIOTB_AD_ALOJAMIENTO decimal                        not null,
+   PRECIOTA_NI_ALOJAMIENTO decimal                        not null,
+   PRECIOTB_NI_ALOJAMIENTO decimal                        not null,
+   DIRECCION_ALOJAMIENTO varchar                        not null,
+   CIUDAD_ALOJAMIENTO   varchar                        not null,
+   PROVINCIA_ALOJAMIENTO varchar                        not null,
+   TELEFONO_ALOJAMIENTO varchar                        not null,
+   DESCRIPCION_ALOJAMIENTO varchar                        not null,
+   IMAGEN_ALOJAMIENTO   varchar                        not null,
+   constraint PK_ALOJAMIENTO primary key clustered (ID_ALOJAMIENTO)
+);
+
+/*==============================================================*/
+/* Table: CLIENTE                                               */
+/*==============================================================*/
+create table CLIENTE 
+(
+   ID_CLIENTE           int                            not null,
+   CI_CLIENTE           varchar                        not null,
+   CONTRASENIA_CLIENTE  varchar                        not null,
+   NOMBRES_CLIENTE      varchar                        not null,
+   APELLIDOS_CLIENTE    varchar                        not null,
+   DIRECCION_CLIENTE    varchar                        not null,
+   CIUDAD_CLIENTE       varchar                        not null,
+   PROVINCIA_CLIENTE    varchar                        not null,
+   POSTAL_CLIENTE       varchar                        not null,
+   TELEFONO_CLIENTE     varchar                        not null,
+   FECHA_NACIMIENTO_CLIENTE date                           not null,
+   EMAIL_CLIENTE        varchar                        not null,
+   BARRIO_CLIENTE       varchar                        not null,
+   constraint PK_CLIENTE primary key clustered (ID_CLIENTE)
+);
+
+/*==============================================================*/
+/* Table: DESTINO                                               */
+/*==============================================================*/
+create table DESTINO 
+(
+   ID_DESTINO           int                            not null,
+   DESTINO_DESTINO      varchar                        not null,
+   IMAGEN_DESTINO       image                          not null,
+   DESCRIPCION_DESTINO  varchar                        not null,
+   PRECIO_BASE          decimal                        not null,
+   constraint PK_DESTINO primary key clustered (ID_DESTINO)
+);
+
+/*==============================================================*/
+/* Table: DETALLE_VIAJE_ACTIVIDAD                               */
+/*==============================================================*/
+create table DETALLE_VIAJE_ACTIVIDAD 
+(
+   ID_DETALLE_VIAJE_ACTIVIDAD int                            not null,
+   ID_VIAJE             int                            not null,
+   ID_ACTIVIDAD         int                            not null,
+   PRECIO               decimal                        not null,
+   constraint PK_DETALLE_VIAJE_ACTIVIDAD primary key clustered (ID_DETALLE_VIAJE_ACTIVIDAD)
+);
+
+/*==============================================================*/
+/* Table: EMPLEADO                                              */
+/*==============================================================*/
+create table EMPLEADO 
+(
+   ID_EMPLEADO          int                            not null,
+   CI_EMPLEADO          varchar                        not null,
+   CONTRASENIA_EMPLEADO varchar                        not null,
+   NOMBRES_EMPLEADO     varchar                        not null,
+   APELLIDOS_EMPLEADO   varchar                        not null,
+   CARGO_EMPLEADO       varchar                        not null,
+   DIRECCION_EMPLEADO   varchar                        not null,
+   CIUDAD_EMPLEADO      varchar                        not null,
+   PROVINCIA_EMPLEADO   varchar                        not null,
+   POSTAL_EMPLEADO      varchar                        not null,
+   EMAIL_EMPLEADO       varchar                        not null,
+   TELEFONO_EMPLEADO    varchar                        not null,
+   FECHA_NACIMIENTO_EMPLEADO date                           not null,
+   FECHA_CONTRATACION_EMPLEADO date                           not null,
+   SUELDO_EMPLEADO      decimal                        not null,
+   constraint PK_EMPLEADO primary key clustered (ID_EMPLEADO)
+);
+
+/*==============================================================*/
+/* Table: TRANSPORTE                                            */
+/*==============================================================*/
+create table TRANSPORTE 
+(
+   ID_TRANSPORTE        int                            not null,
+   DESTINO_TRANSPORTE   varchar                        not null,
+   TIPO_TRANSPORTE      varchar                        not null,
+   PRECIOTA_AD_TRANSPORTE decimal                        not null,
+   PRECIOTB_AD_TRANSPORTE decimal                        not null,
+   PRECIOTA_NI_TRANSPORTE decimal                        not null,
+   PRECIOTB_NI_TRANSPORTE decimal                        not null,
+   constraint PK_TRANSPORTE primary key clustered (ID_TRANSPORTE)
+);
+
+/*==============================================================*/
+/* Table: VIAJE                                                 */
+/*==============================================================*/
+create table VIAJE 
+(
+   ID_VIAJE             int                            not null,
+   ID_CLIENTE           int                            not null,
+   ID_EMPLEADO          int                            not null,
+   ID_ALOJAMIENTO       int                            not null,
+   PR_ALOJAMIENTO       decimal                        not null,
+   ID_TRANSPORTE        int                            not null,
+   PR_TRANSPORTE        decimal                        not null,
+   ID_DESTINO           int                            not null,
+   PR_DESTINO           decimal                        not null,
+   FECHA_SALIDA         date                           not null,
+   FECHA_VUELTA         date                           not null,
+   TEMPORADA            varchar                        not null,
+   FORMA_PAGO           varchar                        not null,
+   NUMERO_ADULTOS       int                            not null,
+   NUMERO_NINOS         int                            not null,
+   CONFIRMADO           int                            not null,
+   SUBTOTAL             decimal                        not null,
+   DESCUENTO            decimal                        not null,
+   PRESUPUESTO          decimal                        not null,
+   PR_ACTIVIDAD         decimal                        not null,
+   constraint PK_VIAJE primary key clustered (ID_VIAJE)
+);
+
+alter table DETALLE_VIAJE_ACTIVIDAD
+   add constraint FK_DETALLE__REFERENCE_VIAJE foreign key (ID_VIAJE)
+      references VIAJE (ID_VIAJE)
+      on update restrict
+      on delete restrict;
+
+alter table DETALLE_VIAJE_ACTIVIDAD
+   add constraint FK_DETALLE__REFERENCE_ACTIVIDA foreign key (ID_ACTIVIDAD)
+      references ACTIVIDAD (ID_ACTIVIDAD)
+      on update restrict
+      on delete restrict;
+
+alter table VIAJE
+   add constraint FK_VIAJE_REFERENCE_CLIENTE foreign key (ID_CLIENTE)
+      references CLIENTE (ID_CLIENTE)
+      on update restrict
+      on delete restrict;
+
+alter table VIAJE
+   add constraint FK_VIAJE_REFERENCE_EMPLEADO foreign key (ID_EMPLEADO)
+      references EMPLEADO (ID_EMPLEADO)
+      on update restrict
+      on delete restrict;
+
+alter table VIAJE
+   add constraint FK_VIAJE_REFERENCE_DESTINO foreign key (ID_DESTINO)
+      references DESTINO (ID_DESTINO)
+      on update restrict
+      on delete restrict;
+
+alter table VIAJE
+   add constraint FK_VIAJE_REFERENCE_ALOJAMIE foreign key (ID_ALOJAMIENTO)
+      references ALOJAMIENTO (ID_ALOJAMIENTO)
+      on update restrict
+      on delete restrict;
+
+alter table VIAJE
+   add constraint FK_VIAJE_REFERENCE_TRANSPOR foreign key (ID_TRANSPORTE)
+      references TRANSPORTE (ID_TRANSPORTE)
+      on update restrict
+      on delete restrict;
+
